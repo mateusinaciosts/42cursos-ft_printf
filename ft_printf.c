@@ -1,21 +1,19 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
-void conversoes(char ind, va_list args);
+void special_char(char ind, va_list args);
 int ft_printf(char *formart, ...)
 {
     va_list args;
-    char *str;
-    int i = 0;
+    int i;
 
+    i = 0;
     va_start(args, formart);
-    printf("Printf: %s\n", formart);
-    printf("my_function:\n");
     while (*formart)
     {
         if (*formart == '%')
         {
-            conversoes(formart[1], args);
+            special_char(formart[1], args);
             formart += 1;
         }
         else
@@ -30,13 +28,14 @@ int ft_printf(char *formart, ...)
 
 int main(void)
 {
-    char *str = "mateus";
-    ft_printf("hello %c%s guys", "World", ", welcome");
+    ft_printf("hello %c%s guys\n", "World", ", welcome");
+    ft_printf("%s!!\n", "Hello world");
+
 }
 
-void conversoes(char ind, va_list arg)
+void special_char(char chr, va_list arg)
 {
-    if (ind == 's')
+    if (chr == 's')
     {
         char *str;
         str = va_arg(arg, char *);
@@ -46,7 +45,7 @@ void conversoes(char ind, va_list arg)
             str++;
         }
     }
-    if (ind == 'c')
+    if (chr == 'c')
     {
         char *str;
         str = va_arg(arg, char *);
