@@ -1,7 +1,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
-void special_char(char ind, va_list args);
+void check_flag(char ind, va_list args);
 int ft_printf(char *formart, ...)
 {
     va_list args;
@@ -13,7 +13,7 @@ int ft_printf(char *formart, ...)
     {
         if (*formart == '%')
         {
-            special_char(formart[1], args);
+            check_flag(formart[1], args);
             formart += 1;
         }
         else
@@ -33,7 +33,7 @@ int main(void)
 
 }
 
-void special_char(char chr, va_list arg)
+void check_flag(char chr, va_list arg)
 {
     if (chr == 's')
     {
