@@ -1,54 +1,60 @@
-#include <stdarg.h>
-#include <stdio.h>
-#include <unistd.h>
-void check_flag(char ind, va_list args);
-int ft_printf(char *formart, ...)
-{
-    va_list args;
-    int i;
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: matsanto <matsanto@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/29 15:01:08 by matsanto          #+#    #+#             */
+/*   Updated: 2023/06/29 15:36:26 by matsanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-    i = 0;
-    va_start(args, formart);
-    while (*formart)
-    {
-        if (*formart == '%')
-        {
-            check_flag(formart[1], args);
-            formart += 1;
-        }
-        else
-        {
-            write(1, formart, 1);
-        }
-        formart++;
-    }
-    va_end(args);
-    return (0);
+#include "ft_printf.h"
+
+int check_flag(char flag, va_list arg)
+{
+    if (flag == 'c')
+        return (ft_putchar(va_arg(arg, int)));
+    if (flag == 's')
+        return (ft_putstr(va_arg(arg, char *)));
+    if (flag == 'p')
+        return (ft_putptr(va_arg(arg, unsigned long), 0));
+    if (flag == 'd' || flag == 'i')
+        return (ft_putnbr(va_arg(arg, int)));
+    if (flag == 'u')
+        return (ft_putnbr_unsigned(va_arg(arg, unsigned int)));
+    if (flag == 'x')
+        return (ft_put_hex_lower(va_arg(arg, unsigned int)));
+    if (flag == 'X')
+        return (ft_put_hex_upper(va_arg(arg, unsigned int)));
+    if (flag == '%')
+        return (ft_putchar('%'));
 }
 
-int main(void)
+int	ft_printf(const char *str, ...)
 {
-    ft_printf("hello %c%s guys\n", "World", ", welcome");
-    ft_printf("%s!!\n", "Hello world");
+	int		len;
+	va_list	arg;
 
-}
-
-void check_flag(char chr, va_list arg)
-{
-    if (chr == 's')
-    {
-        char *str;
-        str = va_arg(arg, char *);
-        while (*str)
-        {
-            write(1, str, 1);
-            str++;
-        }
-    }
-    if (chr == 'c')
-    {
-        char *str;
-        str = va_arg(arg, char *);
-        write(1, &str[0], 1);
-    }
+	if (!str)
+		return (-1);
+	len = 0;
+	va_start(arg, str);
+	while (*str)
+	{
+		if (*str == '%')
+		{
+			str++;
+			len = len + check_flag(*str, arg);
+		}
+		else
+		{
+			ft_putchar(*str);
+			len++;
+		}
+		str++;
+	}
+	va_end(arg);
+	return (len);
 }

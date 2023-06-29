@@ -21,7 +21,6 @@ int	ft_putstr(char *str)
 }
 int	ft_putptr(unsigned long nbr, int flag)
 {
-    char HEX[] = "0123456789ABCDEF"; 
 	if (nbr == 0)
 	{
 		ft_putstr("(nil)");
@@ -31,15 +30,31 @@ int	ft_putptr(unsigned long nbr, int flag)
 		ft_putstr("0x");
 	if (nbr > 15)
 		ft_putptr(nbr / 16, 1);
-	write(1, &HEX[nbr % 16], sizeof(char));
+	write(1, &"0123456789abcdef"[nbr % 16], sizeof(char));
 	return (1);
+}
+
+void	ft_put_hex_lower(unsigned int nbr)
+{
+	if (nbr > 15)
+		ft_put_hex_lower(nbr / 16);
+	write(1, &"0123456789abcdef"[nbr % 16], sizeof(char));
+}
+
+void	ft_put_hex_upper(unsigned int nbr)
+{
+	if (nbr > 15)
+		ft_put_hex_upper(nbr / 16);
+	write(1, &"0123456789ABCDEF"[nbr % 16], sizeof(char));
 }
 
 int main(void)
 {
-    char *str2;
-    str2 = "gato";
-    unsigned long ulong_str = (unsigned long)str2;
-    ft_putptr(ulong_str, 0);
-    printf("\nPrintf:%p", str2);
+    int numb;
+    numb = 2468;
+    ft_putptr(numb, 0);
+	printf("\n");
+	ft_put_hex_lower(numb);
+	printf("\n");
+	ft_put_hex_upper(numb);
 }
