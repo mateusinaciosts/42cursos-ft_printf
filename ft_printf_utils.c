@@ -6,20 +6,21 @@
 /*   By: matsanto <matsanto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 15:01:04 by matsanto          #+#    #+#             */
-/*   Updated: 2023/06/29 15:43:52 by matsanto         ###   ########.fr       */
+/*   Updated: 2023/06/30 15:17:10 by matsanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_putchar(char c)
+int	ft_putchar(char c)
 {
-	return (write(1, &c, 1));
+	write(1, &c, 1);
+	return (1);
 }
 
-int ft_putstr(char *str)
+int	ft_putstr(char *str)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (str)
@@ -35,29 +36,29 @@ int ft_putstr(char *str)
 	return (len);
 }
 
-int ft_putptr(unsigned long nbr, int flag)
+int	ft_putptr(unsigned long nbr, int flag)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (nbr == 0)
 	{
 		len = ft_putstr("(nil)");
-		return len;
+		return (len);
 	}
 	if (flag == 0)
 		len = len + ft_putstr("0x");
 	if (nbr > 15)
-		ft_putptr(nbr / 16, 1);
+		len = len + ft_putptr(nbr / 16, 1);
 	write(1, &"0123456789abcdef"[nbr % 16], sizeof(char));
 	len++;
 	return (len);
 }
 
-int ft_putnbr(int nb)
+int	ft_putnbr(int nb)
 {
-	unsigned int number;
-	int len;
+	unsigned int	number;
+	int				len;
 
 	len = 0;
 	if (nb < 0)
@@ -69,15 +70,22 @@ int ft_putnbr(int nb)
 	else
 		number = nb;
 	if (number >= 10)
-		ft_putnbr(number / 10);
+	{
+		len = len + ft_putnbr(number / 10);
+	}
 	ft_putchar(number % 10 + '0');
 	len++;
 	return (len);
 }
 
-void ft_putnbr_unsigned(unsigned int nb)
+int	ft_putnbr_unsigned(unsigned int nb)
 {
+	int	len;
+
+	len = 0;
 	if (nb >= 10)
-		ft_putnbr(nb / 10);
+		len = len + ft_putnbr(nb / 10);
 	ft_putchar(nb % 10 + '0');
+	len++;
+	return (len);
 }
